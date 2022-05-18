@@ -1,2 +1,3 @@
 # Ignore contents of build folder
-build/*
+build/
+.vscode*
