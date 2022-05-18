@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
   - name: clogger
-    image: c-logging:latest
+    image: clogger:latest
     imagePullPolicy: Never
     resources:
       limits:
