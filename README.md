@@ -13,7 +13,7 @@ cd clogger
 # Binary MUST BE run from the clogger directory, NOT the build dir
 # Getting it to run on your kubernetes cluster:
 # IF ON MINIKUBE RUN: eval $(minikube docker-env)
-docker build -t clogger
+docker build -t clogger .
 kubectl apply -f clogger.yaml
 kubectl logs -f clogger
 ```
