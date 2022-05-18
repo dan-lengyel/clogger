@@ -5,8 +5,8 @@ I used a minikube environment for development & testing.
 
 How to use:
 
-# Clone repository
 ```
+# Clone repository
 cd clogger
 sudo ./build.sh
 # The application can be tested by running ./build/clogger, and changing the log levels with ./setlevel.sh -l $LEVEL
