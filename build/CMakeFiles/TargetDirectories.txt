@@ -1,3 +1,0 @@
-/home/daniellengyel/k8s-logging/clogger/build/CMakeFiles/clogger.dir
-/home/daniellengyel/k8s-logging/clogger/build/CMakeFiles/edit_cache.dir
-/home/daniellengyel/k8s-logging/clogger/build/CMakeFiles/rebuild_cache.dir
