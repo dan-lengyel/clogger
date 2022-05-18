@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/daniellengyel/k8s-logging/clogger'
+make: Leaving directory '/home/daniellengyel/k8s-logging/clogger'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+

@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/daniellengyel/k8s-logging/c-logging/build",
+  "command": "/usr/bin/x86_64-linux-gnu-gcc-7  -I/home/daniellengyel/k8s-logging/c-logging/src/zlog-1.2.15 -g -pthread -o CMakeFiles/clogger.dir/src/main.c.o -c /home/daniellengyel/k8s-logging/c-logging/src/main.c",
+  "file": "/home/daniellengyel/k8s-logging/c-logging/src/main.c"
+}
+]

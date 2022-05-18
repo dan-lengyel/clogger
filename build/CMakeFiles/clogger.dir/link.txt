@@ -1,0 +1,1 @@
+/usr/bin/cc -rdynamic CMakeFiles/clogger.dir/src/main.c.o -o clogger  -lzlog -pthread 
