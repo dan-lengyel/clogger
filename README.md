@@ -8,7 +8,7 @@ How to use:
 # Clone repository
 ```
 cd clogger
-./build.sh
+sudo ./build.sh
 # The application can be tested by running ./build/clogger, and changing the log levels with ./setlevel.sh -l $LEVEL
 # Binary MUST BE run from the clogger directory, NOT the build dir
 # Getting it to run on your kubernetes cluster:
