@@ -1,4 +1,4 @@
 # Ignore contents of build folder
 build/
+# Ignore .vscode
 .vscode
-conf/zlog.conf

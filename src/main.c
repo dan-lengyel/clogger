@@ -20,13 +20,14 @@ static pthread_t inotify_pthread;
 static int fd, wd;
 
 static int zlog_rc;
-static zlog_category_t *c;
+static zlog_category_t *zlog_logs;
+static zlog_category_t *zlog_metrics;
 static char zlog_conf[PATH_MAX];
 static char zlog_folder[PATH_MAX];
 
 // Clean up and exit on SIGINT
 void sig_handler(int sig){
-    zlog_info(c, "Cleaning up and exiting");
+    zlog_info(zlog_logs, "Cleaning up and exiting");
     inotify_rm_watch( fd, wd );
     close( fd );
 	zlog_fini();
@@ -40,13 +41,13 @@ void get_event () {
      
         length = read( (int)fd, buffer, BUF_LEN );  
         if ( length < 0 ) {
-            zlog_error(c, "read" );
+            zlog_error(zlog_logs, "read" );
         }  
       
         while ( i < length ) {
             struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
             if ( event->len ) {
-                zlog_info(c, "Reloading zlog configuration file");
+                zlog_info(zlog_logs, "Reloading zlog configuration file");
                 zlog_reload(zlog_conf);
                 i += EVENT_SIZE + event->len;
             }
@@ -57,6 +58,8 @@ void get_event () {
 int main() {
     // Cleanup on SIGINT
     signal(SIGINT, sig_handler);
+
+    srand(time(NULL));
 
     // Get location of configuration file(s)
     if (getcwd(zlog_conf, sizeof(zlog_conf)) != NULL) {
@@ -78,9 +81,16 @@ int main() {
 		return -1;
 	}
 
-	c = zlog_get_category("logs");
-	if (!c) {
-		printf("Failed to get category\n");
+	zlog_logs = zlog_get_category("logs");
+	if (!zlog_logs) {
+		printf("Failed to get logs category\n");
+		zlog_fini();
+		return -2;
+	}
+
+    zlog_metrics = zlog_get_category("metrics");
+	if (!zlog_metrics) {
+		printf("Failed to get metrics category\n");
 		zlog_fini();
 		return -2;
 	}
@@ -88,14 +98,14 @@ int main() {
     // Initialize inotify to check for config changes
     fd = inotify_init();
     if ( fd < 0 ) {
-        zlog_error(c, "Couldn't initialize inotify");
+        zlog_error(zlog_logs, "Couldn't initialize inotify");
     }
   
-    wd = inotify_add_watch(fd, zlog_folder, IN_CREATE | IN_MODIFY | IN_DELETE); 
+    wd = inotify_add_watch(fd, zlog_folder, IN_MODIFY); 
     if (wd == -1) {
-        zlog_error(c, "Couldn't add watch to %s\n", zlog_folder);
+        zlog_error(zlog_logs, "Couldn't add watch to %s", zlog_folder);
     } else {
-        zlog_info(c, "Watching:: %s\n", zlog_folder);
+        zlog_info(zlog_logs, "Watching:: %s", zlog_folder);
     }
 
     // Imagine main program loop here
@@ -103,13 +113,14 @@ int main() {
     int ret;
     ret = pthread_create(&inotify_pthread, NULL, (void*)get_event, NULL);
 	if (ret < 0) {
-		zlog_error(c, "can't create inotify thread");
+		zlog_error(zlog_logs, "can't create inotify thread");
 		exit(EXIT_FAILURE);
 	}
     while(1){
-        zlog_error(c, "This is a zlog error message");
-        zlog_info(c, "This is a zlog info message");
-        zlog_debug(c, "This is a zlog debug message");
+        zlog_error(zlog_logs, "This is a zlog error message");
+        zlog_info(zlog_logs, "This is a zlog info message");
+        zlog_debug(zlog_logs, "This is a zlog debug message");
+        zlog_info(zlog_metrics, "\"Message\":\"This is a metrics message.\",\"Data\":\"%d\"", rand());
         sleep(1);
     }
 
